@@ -154,10 +154,14 @@ BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for respon
 EPI_dictionary = {'name': [], 'ingredients': [], 'recipe_category': [], 'cuisine_type': [], 'rating': [], 'rating_count': [], 'keywords': []}
 
 for Beautiful in BeautifulSoup_page_EPI_recipe[0:100]:
-    EPI_dictionary['name'] += Beautiful.find_all('h1', itemprop = 'name')[0].text
-    EPI_dictionary['rating'] += Beautiful.find_all('span', class_ = 'rating')[0].text
-    EPI_dictionary['rating_count'] += Beautiful.find_all('span', class_ = 'reviews-count')[0].text
-
+    EPI_dictionary['name'].append(Beautiful.find_all('h1', itemprop = 'name')[0].text)
+    EPI_dictionary['rating'].append(Beautiful.find_all('span', class_ = 'rating')[0].text)
+    EPI_dictionary['rating_count'].append(Beautiful.find_all('span', class_ = 'reviews-count')[0].text)
+    #ingredients
+    ingredient_string = ''
+    for ingredient in Beautiful.find_all('li', class_ = 'ingredient'):
+        ingredient_string += ingredient.text + ', '
+    EPI_dictionary['ingredients'].append(ingredient_string)
 
 #####Parsing recipe pages
 #recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
