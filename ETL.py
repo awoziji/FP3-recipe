@@ -165,21 +165,21 @@ for Beautiful in BeautifulSoup_page_EPI_recipe[0:100]:
 #b = BeautifulSoup(a.text, 'lxml')
 #c = b.find_all('div', class_ = "recipe-content")
 ###Recipe
-ingredient_string = ''
-ingredients = b.find_all('li', class_ = 'ingredient')
-for ingredient in ingredients:
-    ingredient_string += ingredient.text + ' /n/ '
-##Preperation
-preperation = b.find_all('li', class_ = 'preparation-step')
-###Tags
-#<dt itemprop="recipeCategory">
-recipe_category = b.find_all('dt', itemprop = "recipeCategory")
-# <dt itemprop="recipeCuisine">
-recipe_cuisine = b.find_all('dt', itemprop = "recipeCuisine")
-#review
-
-#Name - how do I get content from h1-tag?
-name = b.find_all('h1', itemprop = 'name')[0].text
-#rating
-rating = b.find_all('span', class_ = 'rating')[0].text
-rating_count = b.find_all('span', class_ = 'reviews-count')[0].text
+# ingredient_string = ''
+# ingredients = b.find_all('li', class_ = 'ingredient')
+# for ingredient in ingredients:
+#     ingredient_string += ingredient.text + ' /n/ '
+# ##Preperation
+# preperation = b.find_all('li', class_ = 'preparation-step')
+# ###Tags
+# #<dt itemprop="recipeCategory">
+# recipe_category = b.find_all('dt', itemprop = "recipeCategory")
+# # <dt itemprop="recipeCuisine">
+# recipe_cuisine = b.find_all('dt', itemprop = "recipeCuisine")
+# #review
+#
+# #Name - how do I get content from h1-tag?
+# name = b.find_all('h1', itemprop = 'name')[0].text
+# #rating
+# rating = b.find_all('span', class_ = 'rating')[0].text
+# rating_count = b.find_all('span', class_ = 'reviews-count')[0].text
