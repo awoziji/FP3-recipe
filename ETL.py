@@ -149,7 +149,7 @@ if False:
 #############GENERALIZE
 recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
 
-response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,100)]
+response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
 BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
 EPI_dictionary = {'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
 
@@ -172,7 +172,7 @@ for Beautiful in BeautifulSoup_page_EPI_recipe:
     EPI_dictionary['recipe_cuisine'].append(recipe_cuisine_string)
     EPI_dictionary['keywords'].append(recipe_category_string + recipe_cuisine_string)
     print('     o     ')
-    print('            <(''<)')
+    print('            <(..<)')
 
 recipe_info = pd.DataFrame(EPI_dictionary)
 recipe_cuisine_recipe_info = pd.concat([recipe_cuisine, recipe_info])
