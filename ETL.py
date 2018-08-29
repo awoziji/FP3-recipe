@@ -2,6 +2,8 @@ import bs4
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import datetime
+import numpy as np
 
 #__________________________________MET__________________________________________
 #__________________________________MET__________________________________________
@@ -140,66 +142,37 @@ if False:
     recipe_df = pd.DataFrame(data={'cuisine': BeautifulSoup_page_EPI_cuisine_recipe_link[0],'recipe_link':BeautifulSoup_page_EPI_cuisine_recipe_link[1]})
     recipe_df.to_csv("./recipe_cuisine.csv", sep=',',index=False)
 
-
-
-
 #############GENERALIZE
 #############GENERALIZE
 #############GENERALIZE
 #############GENERALIZE
 recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
 
-response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
-BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
-for a in range(0, 17):
-    a = a*1000
-    print(a*1000, a*1000 + 1000)
-    EPI_dictionary = {'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
-    for Beautiful in BeautifulSoup_page_EPI_recipe[a:a+1000]:
-        print('(>..)>')
-        EPI_dictionary['name'].append(Beautiful.find_all('h1', itemprop = 'name')[0].text)
-        EPI_dictionary['rating'].append(Beautiful.find_all('span', class_ = 'rating')[0].text)
-        EPI_dictionary['rating_count'].append(Beautiful.find_all('span', class_ = 'reviews-count')[0].text)
+# response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
+# BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
+for a in range(29, 173):
+    print(datetime.datetime.now())
+    print('----------',a*100, a*100 + 100)
+    response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a,a*100 + 100)]
+    BeautifulSoup_page_EPI_recipe = [(response[0], BeautifulSoup(response[1].text, 'lxml')) for response in response_page_EPI_recipe]
+    EPI_dictionary = {'link': [],'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
+    for Beautiful in BeautifulSoup_page_EPI_recipe[a:a+100]:
+        EPI_dictionary['link'].append(Beautiful[0])
+        EPI_dictionary['name'].append(Beautiful[1].find_all('h1', itemprop = 'name')[0].text)
+        EPI_dictionary['rating'].append(Beautiful[1].find_all('span', class_ = 'rating')[0].text)
+        EPI_dictionary['rating_count'].append(Beautiful[1].find_all('span', class_ = 'reviews-count')[0].text)
         ingredient_string = ''
-        for ingredient in Beautiful.find_all('li', class_ = 'ingredient'):
+        for ingredient in Beautiful[1].find_all('li', class_ = 'ingredient'):
             ingredient_string += ingredient.text + ' $ '
         EPI_dictionary['ingredients'].append(ingredient_string)
         recipe_category_string = ''
-        for recipe_category in Beautiful.find_all('dt', itemprop = "recipeCategory"):
+        for recipe_category in Beautiful[1].find_all('dt', itemprop = "recipeCategory"):
             recipe_category_string += recipe_category.text + ' $ '
         EPI_dictionary['recipe_category'].append(recipe_category_string)
         recipe_cuisine_string = ''
-        for recipe_cuisine_ in Beautiful.find_all('dt', itemprop = "recipeCuisine"):
+        for recipe_cuisine_ in Beautiful[1].find_all('dt', itemprop = "recipeCuisine"):
             recipe_cuisine_string += recipe_cuisine_.text + ' $ '
         EPI_dictionary['recipe_cuisine'].append(recipe_cuisine_string)
         EPI_dictionary['keywords'].append(recipe_category_string + recipe_cuisine_string)
-        print('          o     ')
-        print('            <(..<)')
-
     recipe_info = pd.DataFrame(EPI_dictionary)
-    recipe_cuisine_recipe_info = pd.concat([recipe_cuisine, recipe_info])
-    recipe_cuisine_recipe_info.to_csv("./recipe_cuisine_recipe_info"+ str(a) +".csv", sep=',',index=False)
-#####Parsing recipe pages
-#recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
-#a = requests.get(recipe_cuisine['recipe_link'][15000])
-#b = BeautifulSoup(a.text, 'lxml')
-#c = b.find_all('div', class_ = "recipe-content")
-###Recipe
-# ingredient_string = ''
-# ingredients = b.find_all('li', class_ = 'ingredient')
-# for ingredient in ingredients:
-#     ingredient_string += ingredient.text + ' /n/ '
-# ##Preperation
-# preperation = b.find_all('li', class_ = 'preparation-step')
-# ###Tags
-# #<dt itemprop="recipeCategory">
-# recipe_category = b.find_all('dt', itemprop = "recipeCategory")
-# # <dt itemprop="recipeCuisine">
-# recipe_cuisine = b.find_all('dt', itemprop = "recipeCuisine")
-# #review
-#
-# #Name - how do I get content from h1-tag?
-# name = b.find_all('h1', itemprop = 'name')[0].text
-# #rating
-# rating = b.find_all('span', class_ = 'rating')[0].text
-# rating_count = b.find_all('span', class_ = 'reviews-count')[0].text
+    recipe_info.to_csv("./recipe_cuisine_recipe_info"+ str(a) +".csv", sep=',',index=False)
