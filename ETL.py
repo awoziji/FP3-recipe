@@ -151,18 +151,32 @@ recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
 
 response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,100)]
 BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
-EPI_dictionary = {'name': [], 'ingredients': [], 'recipe_category': [], 'cuisine_type': [], 'rating': [], 'rating_count': [], 'keywords': []}
+EPI_dictionary = {'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
 
-for Beautiful in BeautifulSoup_page_EPI_recipe[0:100]:
+for Beautiful in BeautifulSoup_page_EPI_recipe:
+    print('(>..)>')
     EPI_dictionary['name'].append(Beautiful.find_all('h1', itemprop = 'name')[0].text)
     EPI_dictionary['rating'].append(Beautiful.find_all('span', class_ = 'rating')[0].text)
     EPI_dictionary['rating_count'].append(Beautiful.find_all('span', class_ = 'reviews-count')[0].text)
-    #ingredients
     ingredient_string = ''
     for ingredient in Beautiful.find_all('li', class_ = 'ingredient'):
-        ingredient_string += ingredient.text + ', '
+        ingredient_string += ingredient.text + ' $ '
     EPI_dictionary['ingredients'].append(ingredient_string)
+    recipe_category_string = ''
+    for recipe_category in Beautiful.find_all('dt', itemprop = "recipeCategory"):
+        recipe_category_string += recipe_category.text + ' $ '
+    EPI_dictionary['recipe_category'].append(recipe_category_string)
+    recipe_cuisine_string = ''
+    for recipe_cuisine_ in Beautiful.find_all('dt', itemprop = "recipeCuisine"):
+        recipe_cuisine_string += recipe_cuisine_.text + ' $ '
+    EPI_dictionary['recipe_cuisine'].append(recipe_cuisine_string)
+    EPI_dictionary['keywords'].append(recipe_category_string + recipe_cuisine_string)
+    print('     o     ')
+    print('            <(''<)')
 
+recipe_info = pd.DataFrame(EPI_dictionary)
+recipe_cuisine_recipe_info = pd.concat([recipe_cuisine, recipe_info])
+recipe_cuisine_recipe_info.to_csv("./recipe_cuisine_recipe_info.csv", sep=',',index=False)
 #####Parsing recipe pages
 #recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
 #a = requests.get(recipe_cuisine['recipe_link'][15000])
