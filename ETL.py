@@ -150,7 +150,7 @@ recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
 
 # response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
 # BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
-for a in range(29, 173):
+for a in range(34, 173):
     print(datetime.datetime.now())
     print('----------',a*100, a*100 + 100)
     response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a,a*100 + 100)]
