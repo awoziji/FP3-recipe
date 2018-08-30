@@ -142,37 +142,40 @@ if False:
     recipe_df = pd.DataFrame(data={'cuisine': BeautifulSoup_page_EPI_cuisine_recipe_link[0],'recipe_link':BeautifulSoup_page_EPI_cuisine_recipe_link[1]})
     recipe_df.to_csv("./recipe_cuisine.csv", sep=',',index=False)
 
-#############GENERALIZE
-#############GENERALIZE
-#############GENERALIZE
-#############GENERALIZE
-recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
+    #############GENERALIZE
+    #############GENERALIZE
+    #############GENERALIZE
+    #############GENERALIZE
+    recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
 
-# response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
-# BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
-for a in range(34, 173):
-    print(datetime.datetime.now())
-    print('----------',a*100, a*100 + 100)
-    response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a,a*100 + 100)]
-    BeautifulSoup_page_EPI_recipe = [(response[0], BeautifulSoup(response[1].text, 'lxml')) for response in response_page_EPI_recipe]
-    EPI_dictionary = {'link': [],'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
-    for Beautiful in BeautifulSoup_page_EPI_recipe[a:a+100]:
-        EPI_dictionary['link'].append(Beautiful[0])
-        EPI_dictionary['name'].append(Beautiful[1].find_all('h1', itemprop = 'name')[0].text)
-        EPI_dictionary['rating'].append(Beautiful[1].find_all('span', class_ = 'rating')[0].text)
-        EPI_dictionary['rating_count'].append(Beautiful[1].find_all('span', class_ = 'reviews-count')[0].text)
-        ingredient_string = ''
-        for ingredient in Beautiful[1].find_all('li', class_ = 'ingredient'):
-            ingredient_string += ingredient.text + ' $ '
-        EPI_dictionary['ingredients'].append(ingredient_string)
-        recipe_category_string = ''
-        for recipe_category in Beautiful[1].find_all('dt', itemprop = "recipeCategory"):
-            recipe_category_string += recipe_category.text + ' $ '
-        EPI_dictionary['recipe_category'].append(recipe_category_string)
-        recipe_cuisine_string = ''
-        for recipe_cuisine_ in Beautiful[1].find_all('dt', itemprop = "recipeCuisine"):
-            recipe_cuisine_string += recipe_cuisine_.text + ' $ '
-        EPI_dictionary['recipe_cuisine'].append(recipe_cuisine_string)
-        EPI_dictionary['keywords'].append(recipe_category_string + recipe_cuisine_string)
-    recipe_info = pd.DataFrame(EPI_dictionary)
-    recipe_info.to_csv("./recipe_cuisine_recipe_info"+ str(a) +".csv", sep=',',index=False)
+    # response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
+    # BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
+    for a in range(50, 173):
+        print(datetime.datetime.now())
+        print('----------',a*100, a*100 + 100)
+        response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a,a*100 + 100)]
+        BeautifulSoup_page_EPI_recipe = [(response[0], BeautifulSoup(response[1].text, 'lxml')) for response in response_page_EPI_recipe]
+        EPI_dictionary = {'link': [],'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
+        for Beautiful in BeautifulSoup_page_EPI_recipe[a:a+100]:
+            EPI_dictionary['link'].append(Beautiful[0])
+            EPI_dictionary['name'].append(Beautiful[1].find_all('h1', itemprop = 'name')[0].text)
+            EPI_dictionary['rating'].append(Beautiful[1].find_all('span', class_ = 'rating')[0].text)
+            EPI_dictionary['rating_count'].append(Beautiful[1].find_all('span', class_ = 'reviews-count')[0].text)
+            ingredient_string = ''
+            for ingredient in Beautiful[1].find_all('li', class_ = 'ingredient'):
+                ingredient_string += ingredient.text + ' $ '
+            EPI_dictionary['ingredients'].append(ingredient_string)
+            recipe_category_string = ''
+            for recipe_category in Beautiful[1].find_all('dt', itemprop = "recipeCategory"):
+                recipe_category_string += recipe_category.text + ' $ '
+            EPI_dictionary['recipe_category'].append(recipe_category_string)
+            recipe_cuisine_string = ''
+            for recipe_cuisine_ in Beautiful[1].find_all('dt', itemprop = "recipeCuisine"):
+                recipe_cuisine_string += recipe_cuisine_.text + ' $ '
+            EPI_dictionary['recipe_cuisine'].append(recipe_cuisine_string)
+            EPI_dictionary['keywords'].append(recipe_category_string + recipe_cuisine_string)
+        recipe_info = pd.DataFrame(EPI_dictionary)
+        recipe_info.to_csv("./recipe_cuisine_recipe_info"+ str(a) +".csv", sep=',',index=False)
+
+df = pd.concat([pd.read_csv('recipe_cuisine_recipe_info' + str(i) + '.csv')for i in range(0,52)], axis = 0)
+df.to_csv('./recipe.csv', sep = ',', index = False)
