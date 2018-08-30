@@ -150,17 +150,29 @@ if False:
 
     # response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
     # BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
-    for a in range(50, 173):
+    for a in range(101, 173):
         print(datetime.datetime.now())
         print('----------',a*100, a*100 + 100)
-        response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a,a*100 + 100)]
+        response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a*100,a*100 + 100)]
+        print('post_Request')
         BeautifulSoup_page_EPI_recipe = [(response[0], BeautifulSoup(response[1].text, 'lxml')) for response in response_page_EPI_recipe]
+        print('beautiful_Soup')
         EPI_dictionary = {'link': [],'name': [], 'ingredients': [], 'recipe_category': [], 'recipe_cuisine': [], 'rating': [], 'rating_count': [], 'keywords': []}
-        for Beautiful in BeautifulSoup_page_EPI_recipe[a:a+100]:
+        for Beautiful in BeautifulSoup_page_EPI_recipe:
+            print('--')
             EPI_dictionary['link'].append(Beautiful[0])
-            EPI_dictionary['name'].append(Beautiful[1].find_all('h1', itemprop = 'name')[0].text)
-            EPI_dictionary['rating'].append(Beautiful[1].find_all('span', class_ = 'rating')[0].text)
-            EPI_dictionary['rating_count'].append(Beautiful[1].find_all('span', class_ = 'reviews-count')[0].text)
+            try:
+                EPI_dictionary['name'].append(Beautiful[1].find_all('h1', itemprop = 'name')[0].text)
+            except:
+                EPI_dictionary['name'].append('unknown')
+            try:
+                EPI_dictionary['rating'].append(Beautiful[1].find_all('span', class_ = 'rating')[0].text)
+            except:
+                EPI_dictionary['rating'].append(0)
+            try:
+                EPI_dictionary['rating_count'].append(Beautiful[1].find_all('span', class_ = 'reviews-count')[0].text)
+            except:
+                EPI_dictionary['rating_count'].append(0)
             ingredient_string = ''
             for ingredient in Beautiful[1].find_all('li', class_ = 'ingredient'):
                 ingredient_string += ingredient.text + ' $ '
@@ -177,5 +189,5 @@ if False:
         recipe_info = pd.DataFrame(EPI_dictionary)
         recipe_info.to_csv("./recipe_cuisine_recipe_info"+ str(a) +".csv", sep=',',index=False)
 
-df = pd.concat([pd.read_csv('recipe_cuisine_recipe_info' + str(i) + '.csv')for i in range(0,52)], axis = 0)
+df = pd.concat([pd.read_csv('recipe_cuisine_recipe_info' + str(i) + '.csv')for i in range(0,173)], axis = 0)
 df.to_csv('./recipe.csv', sep = ',', index = False)
