@@ -4,6 +4,11 @@ import requests
 import pandas as pd
 import datetime
 import numpy as np
+import nltk
+nltk.download('punkt') ##this downloads the default word tokenizer
+nltk.download('stopwords') ##this downloads all stopwords
+nltk.download('popular') ##this downloads many different popular libraries
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 #__________________________________MET__________________________________________
 #__________________________________MET__________________________________________
@@ -150,7 +155,7 @@ if False:
 
     # response_page_EPI_recipe = [requests.get(recipe_cuisine['recipe_link'][_recipe_link]) for _recipe_link in range(0,len(recipe_cuisine))]
     # BeautifulSoup_page_EPI_recipe = [BeautifulSoup(response.text, 'lxml') for response in response_page_EPI_recipe]
-    for a in range(101, 173):
+    for a in range(173, 174):
         print(datetime.datetime.now())
         print('----------',a*100, a*100 + 100)
         response_page_EPI_recipe = [(recipe_cuisine['recipe_link'][_recipe_link], requests.get(recipe_cuisine['recipe_link'][_recipe_link])) for _recipe_link in range(a*100,a*100 + 100)]
@@ -189,5 +194,42 @@ if False:
         recipe_info = pd.DataFrame(EPI_dictionary)
         recipe_info.to_csv("./recipe_cuisine_recipe_info"+ str(a) +".csv", sep=',',index=False)
 
-df = pd.concat([pd.read_csv('recipe_cuisine_recipe_info' + str(i) + '.csv')for i in range(0,173)], axis = 0)
-df.to_csv('./recipe.csv', sep = ',', index = False)
+    df = pd.concat([pd.read_csv('recipe_cuisine_recipe_info' + str(i) + '.csv')for i in range(0,174)], axis = 0)
+    df.to_csv('./recipe.csv', sep = ',', index = False)
+
+    recipe_cuisine = pd.read_csv('recipe_cuisine.csv')
+    df = pd.read_csv('recipe.csv')
+    recipe_cuisine.columns = ['col1', 'col2']
+    df1 = pd.concat([df, recipe_cuisine['col1']], axis = 1)
+
+df = pd.read_csv('allrecipes.csv')
+
+name_count_vectorizer = CountVectorizer(stop_words='english')
+name_count_vectorizer.fit(np.array(df['name'].fillna('unknown')))
+name_count_vectorizer_transform = name_count_vectorizer.transform(df['name'].fillna(' '))
+name_count_vectorizer_OHE = pd.DataFrame(name_count_vectorizer_transform.toarray(), columns = name_count_vectorizer.get_feature_names())
+
+ingredients_count_vectorizer = CountVectorizer(stop_words='english')
+ingredients_count_vectorizer.fit(np.array(df['ingredients'].fillna('unknown')))
+ingredients_count_vectorizer_transform = ingredients_count_vectorizer.transform(df['ingredients'].fillna(' '))
+ingredients_count_vectorizer_OHE = pd.DataFrame(ingredients_count_vectorizer_transform.toarray(), columns = ingredients_count_vectorizer.get_feature_names())
+
+keywords_count_vectorizer = CountVectorizer(stop_words='english')
+keywords_count_vectorizer.fit(np.array(df['keywords'].fillna('unknown')))
+keywords_count_vectorizer_transform = keywords_count_vectorizer.transform(df['keywords'].fillna(' '))
+keywords_count_vectorizer_OHE = pd.DataFrame(keywords_count_vectorizer_transform.toarray(), columns = keywords_count_vectorizer.get_feature_names())
+
+name_tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+name_tfidf_vectorizer.fit(np.array(df['name'].fillna('unknown')))
+name_tfidf_vectorizer_transform = name_tfidf_vectorizer.transform(df['name'].fillna(' '))
+name_tfidf_vectorizer_OHE = pd.DataFrame(name_tfidf_vectorizer_transform.toarray(), columns = name_tfidf_vectorizer.get_feature_names())
+
+ingredients_tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+ingredients_tfidf_vectorizer.fit(np.array(df['ingredients'].fillna('unknown')))
+ingredients_tfidf_vectorizer_transform = ingredients_tfidf_vectorizer.transform(df['ingredients'].fillna(' '))
+ingredients_tfidf_vectorizer_OHE = pd.DataFrame(ingredients_tfidf_vectorizer_transform.toarray(), columns = ingredients_tfidf_vectorizer.get_feature_names())
+
+keywords_tfidf_vectorizer = TfidfVectorizer(stop_words='english')
+keywords_tfidf_vectorizer.fit(np.array(df['keywords'].fillna('unknown')))
+keywords_tfidf_vectorizer_transform = keywords_tfidf_vectorizer.transform(df['keywords'].fillna(' '))
+keywords_tfidf_vectorizer_OHE = pd.DataFrame(keywords_tfidf_vectorizer_transform.toarray(), columns = keywords_tfidf_vectorizer.get_feature_names())

@@ -29,9 +29,6 @@ from sklearn.ensemble.partial_dependence import plot_partial_dependence
 file_num = 50
 test_df = pd.read_csv('recipe_cuisine_recipe_info' + str(file_num) + '.csv')
 
-{}
-
-
 def randomForestClassifier(_X, _y, args = None):
     RFC_ = RandomForestClassifier()
     RFC_cross_validate = cross_val_score(RFC_, _X, _y)
