@@ -42,8 +42,8 @@ Our model is has a high true positive at predicting a recipe with 0 in which it 
 # Model Performance Demonstration 
 ### Example 1: Predict recipe cuisine type
 recipe link: https://www.allrecipes.com/recipe/13443/harira/
-predicted cuisine type: African 
-actual cuisine type: Middle Eastern / African
+
+Predicted cuisine type: African  / Actual cuisine type: Middle Eastern / African
 
 Input and prediction snapshot: 
 <p align="left">
@@ -53,8 +53,8 @@ Input and prediction snapshot:
 ### Example 2: Predict recipe rating
 
 recipe link: http://allrecipes.asia/recipe/4911/saag-masoor-dal--indian-dhal-with-spinach-.aspx
-predicted rating: 4
-actual rating: 4
+
+Predicted rating: 4 / Actual rating: 4
 
 Input and prediction snapshot: 
 <p align="left">
