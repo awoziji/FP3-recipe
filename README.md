@@ -28,7 +28,9 @@ Category keys: American=0, Europe =1, Asian=2, Middle-eastern/african =3, unknow
 <p align="left">
   <img src="project3_visuals/Screen Shot 2018-10-12 at 2.42.51 PM.png" title="confusion matrix ">
 </p>
+
 Our model predicted that most recipes belong in the 'Unknown' category as that is our dominate class. 
+
 # Prediction Model 2: Using Name, keyword and recipe to predict rating 
 Rating Scale: 0-4 
 ### RandomForestClassifier(n_estimators=100, max_depth= 100)
@@ -38,19 +40,23 @@ Rating Scale: 0-4
 Our model is has a high true positive at predicting a recipe with 0 in which it actually has a 0 rating, however, it has a high predicting that a recipe will have a 0 rating even when its rating is 3. 
 
 # Model Performance Demonstration 
-**_Example 1: Predict recipe cuisine type_**
+### Example 1: Predict recipe cuisine type
 recipe link: https://www.allrecipes.com/recipe/13443/harira/
 predicted cuisine type: African 
 actual cuisine type: Middle Eastern / African
-input and prediction snapshot: 
+
+Input and prediction snapshot: 
 <p align="left">
   <img src="project3_visuals/Screen Shot 2018-10-12 at 2.43.29 PM.png" title="cusine type prediction demo 1">
 </p>
-**_Example 2: Predict recipe rating_**
-Predicting recipe rating: 
+
+### Example 2: Predict recipe rating
+
 recipe link: http://allrecipes.asia/recipe/4911/saag-masoor-dal--indian-dhal-with-spinach-.aspx
 predicted rating: 4
 actual rating: 4
+
+Input and prediction snapshot: 
 <p align="left">
   <img src="project3_visuals/Screen Shot 2018-10-12 at 2.44.25 PM.png" title="cusine type prediction demo 1">
 </p>
